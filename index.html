@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nagoya Trip 2026</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"DM Sans"', '"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        earth: {
+                            bg: '#F2EFED',       // Warm Gray/Beige
+                            card: '#FFFFFF',     // Card White
+                            primary: '#5F6F52',  // Moss Green
+                            secondary: '#A69080',// Khaki
+                            text: '#4A4641',     // Dark Brown
+                            muted: '#9C9C9C',    // Muted Gray
+                            accent: '#B99470',   // Wood
+                            shop: '#BC6C25',     // Shopping Tag
+                            food: '#DDA15E',     // Food Tag
+                            coffee: '#606C38',   // Coffee Tag
+                            alert: '#D9534F',    // Delete Red
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(95, 111, 82, 0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #F2EFED; color: #4A4641; -webkit-tap-highlight-color: transparent; }
+        .glass-nav { background: rgba(242, 239, 237, 0.95); backdrop-filter: blur(12px); border-top: 1px solid rgba(166, 144, 128, 0.2); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .timeline-line { position: absolute; left: 20px; top: 40px; bottom: -20px; width: 2px; background-color: #E0DCD9; z-index: 0; border-left: 2px dashed #B99470; }
+        .last-item .timeline-line { display: none; }
+        .travel-pill { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #F2EFED; padding: 4px 10px; border-radius: 20px; font-size: 10px; color: #A69080; font-weight: 700; white-space: nowrap; z-index: 1; border: 1px solid #E0DCD9; }
+        .btn-press:active { transform: scale(0.96); transition: 0.1s; }
+        .custom-checkbox input:checked + div { background-color: #5F6F52; border-color: #5F6F52; }
+        .custom-checkbox input:checked + div:after { content: '\2714'; color: white; font-size: 10px; display: block; text-align: center; }
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="font-sans antialiased pb-24 pt-4">
+
+    <main id="app" class="px-4">
+        
+        <!-- === TAB: PLAN === -->
+        <div id="view-plan" class="tab-content fade-in">
+            <div class="mb-5 pt-2 flex justify-between items-end">
+                <div>
+                    <div class="text-xs font-bold text-earth-secondary tracking-[0.2em] uppercase mb-1">Family Trip</div>
+                    <h1 class="text-3xl font-bold text-earth-text font-serif">Nagoya 2026</h1>
+                </div>
+                <div class="text-right">
+                    <div class="text-xs text-earth-muted">Jan 8 - 12</div>
+                    <div class="text-sm font-bold text-earth-primary"><i class="fa-solid fa-location-dot mr-1"></i>Aichi, JP</div>
+                </div>
+            </div>
+
+            <!-- Date Nav -->
+            <div class="sticky top-0 z-40 bg-[#F2EFED]/95 backdrop-blur-md pb-4 pt-2 overflow-x-auto no-scrollbar flex space-x-3 snap-x">
+                <button onclick="scrollToDay('day1')" class="btn-press snap-start flex-shrink-0 bg-white rounded-xl p-2 min-w-[90px] shadow-soft border-2 border-earth-primary group">
+                    <div class="text-[10px] text-earth-muted font-bold mb-1">1/8 (Thu)</div>
+                    <div class="text-lg font-bold text-earth-text mb-1">Day 1</div>
+                    <div class="flex items-center gap-1 justify-center bg-gray-50 rounded-md py-1">
+                        <i class="fa-solid fa-cloud text-gray-400 text-[10px]"></i><span class="text-[10px] font-bold text-earth-primary">8°</span>
+                    </div>
+                </button>
+                <button onclick="scrollToDay('day2')" class="btn-press snap-start flex-shrink-0 bg-white rounded-xl p-2 min-w-[90px] shadow-sm border border-transparent group">
+                    <div class="text-[10px] text-earth-muted font-bold mb-1">1/9 (Fri)</div>
+                    <div class="text-lg font-bold text-earth-text mb-1">Day 2</div>
+                    <div class="flex items-center gap-1 justify-center bg-gray-50 rounded-md py-1">
+                        <i class="fa-solid fa-sun text-orange-400 text-[10px]"></i><span class="text-[10px] font-bold text-earth-primary">6°</span>
+                    </div>
+                </button>
+                <button onclick="scrollToDay('day3')" class="btn-press snap-start flex-shrink-0 bg-white rounded-xl p-2 min-w-[90px] shadow-sm border border-transparent group">
+                    <div class="text-[10px] text-earth-muted font-bold mb-1">1/10 (Sat)</div>
+                    <div class="text-lg font-bold text-earth-text mb-1">Day 3</div>
+                    <div class="flex items-center gap-1 justify-center bg-gray-50 rounded-md py-1">
+                        <i class="fa-solid fa-cloud-sun text-earth-accent text-[10px]"></i><span class="text-[10px] font-bold text-earth-primary">7°</span>
+                    </div>
+                </button>
+                <button onclick="scrollToDay('day4')" class="btn-press snap-start flex-shrink-0 bg-white rounded-xl p-2 min-w-[90px] shadow-sm border border-transparent group">
+                    <div class="text-[10px] text-earth-muted font-bold mb-1">1/11 (Sun)</div>
+                    <div class="text-lg font-bold text-earth-text mb-1">Day 4</div>
+                    <div class="flex items-center gap-1 justify-center bg-gray-50 rounded-md py-1">
+                        <i class="fa-solid fa-sun text-orange-400 text-[10px]"></i><span class="text-[10px] font-bold text-earth-primary">9°</span>
+                    </div>
+                </button>
+                <button onclick="scrollToDay('day5')" class="btn-press snap-start flex-shrink-0 bg-white rounded-xl p-2 min-w-[90px] shadow-sm border border-transparent group">
+                    <div class="text-[10px] text-red-400 font-bold mb-1">1/12 (Mon)</div>
+                    <div class="text-lg font-bold text-earth-text mb-1">Day 5</div>
+                    <div class="flex items-center gap-1 justify-center bg-gray-50 rounded-md py-1">
+                        <i class="fa-solid fa-cloud-rain text-blue-400 text-[10px]"></i><span class="text-[10px] font-bold text-earth-primary">8°</span>
+                    </div>
+                </button>
+            </div>
+
+            <div class="space-y-10 pb-10 mt-2">
+                <!-- Day 1 -->
+                <div id="day1" class="scroll-mt-40">
+                    <div class="flex items-center gap-3 mb-4"><span class="text-xl font-bold text-earth-secondary">Day 01</span><h2 class="text-lg font-bold text-earth-text">移動日 & 安頓</h2></div>
+                    <div class="relative pl-4">
+                        <div class="relative pl-10 pb-8"><div class="absolute left-4 top-2 w-3 h-3 bg-earth-text rounded-full border-2 border-[#F2EFED] z-10"></div><div class="timeline-line"><div class="travel-pill">🚗 1h10</div></div><div class="text-xs font-bold text-earth-secondary mb-1">08:50</div><div class="bg-white p-4 rounded-2xl shadow-soft border-l-4 border-earth-text"><h3 class="font-bold text-earth-text">竹北家出發</h3><p class="text-xs text-gray-500 mt-1">預約接送 (含汽座)</p></div></div>
+                        <div class="relative pl-10 pb-8"><div class="absolute left-4 top-2 w-3 h-3 bg-earth-primary rounded-full border-2 border-[#F2EFED] z-10"></div><div class="timeline-line"><div class="travel-pill">✈️ 2h35</div></div><div class="text-xs font-bold text-earth-secondary mb-1">12:00 - 15:35</div><div class="bg-white p-4 rounded-2xl shadow-soft border-l-4 border-earth-primary"><h3 class="font-bold text-earth-text">CX530: TPE ➜ NGO</h3><div class="mt-2 text-xs text-gray-500 flex justify-between"><span>T1 航廈</span><span>15:35 抵達</span></div></div></div>
+                        <div class="relative pl-10 pb-8"><div class="absolute left-4 top-2 w-3 h-3 bg-blue-600 rounded-full border-2 border-[#F2EFED] z-10"></div><div class="timeline-line"><div class="travel-pill">🚅 28m</div></div><div class="text-xs font-bold text-earth-secondary mb-1">16:30</div><div class="bg-white p-4 rounded-2xl shadow-soft border-l-4 border-blue-600"><h3 class="font-bold text-earth-text">μ-SKY 特急 (指定席)</h3><p class="text-[10px] text-gray-400 mt-1">推薦 1、4 車廂 (行李架)</p></div></div>
+                        <div class="relative pl-10 last-item"><div class="absolute left-4 top-2 w-3 h-3 bg-earth-accent rounded-full border-2 border-[#F2EFED] z-10"></div><div class="text-xs font-bold text-earth-secondary mb-1">18:00 - 21:00</div><div class="bg-white p-4 rounded-2xl shadow-soft border-l-4 border-earth-accent"><h3 class="font-bold text-earth-text">Check-in & 晚餐</h3><p class="text-xs text-gray-500 mt-1">宿：Nikko Style Nagoya</p><p class="text-xs text-gray-500">食：JR Gate Tower (12/13F)</p></div></div>
+                    </div>
+                </div>
+                <!-- Day 2 -->
+                <div id="day2" class="scroll-mt-40">
+                    <div class="flex items-center gap-3 mb-4"><span class="text-xl font-bold text-earth-secondary">Day 02</span><h2 class="text-lg font-bold text-earth-text">科學館 & 電器</h2></div>
+                    <div class="relative pl-4">
+                        <div class="relative pl-10 pb-8"><div class="absolute left-4 top-2 w-3 h-3 bg-earth-primary rounded-full border-2 border-[#F2EFED] z-10"></div><div class="timeline-line"><div class="travel-pill">🚕 10m</div></div><div class="text-xs font-bold text-earth-secondary mb-1">09:30</div><div class="bg-white p-4 rounded-2xl shadow-soft border-l-4 border-earth-primary"><h3 class="font-bold text-earth-text">名古屋市科學館</h3><p class="text-xs text-gray-500 mt-1">2F 生命館/理工館 (玩水)</p></div></div>
+                        <div class="relative pl-10 pb-8"><div class="absolute left-4 top-2 w-3 h-3 bg-earth-accent rounded-full border-2 border-[#F2EFED] z-10"></div><div class="timeline-line"><div class="travel-pill">🚶 5m</div></div><div class="text-xs font-bold text-earth-secondary mb-1">13:00</div><div class="bg-white p-4 rounded-2xl shadow-soft border-l-4 border-earth-accent"><h3 class="font-bold text-earth-text">山本屋總本家</h3><p class="text-xs text-gray-500">指定座敷席 (榻榻米)</p></div></div>
+                        <div class="relative pl-10 last-item"><div class="absolute left-4 top-2 w-3 h-3 bg-red-400 rounded-full border-2 border-[#F2EFED] z-10"></div><div class="text-xs font-bold text-earth-secondary mb-1">15:00</div><div class="bg-white p-4 rounded-2xl shadow-soft border-l-4 border-red-400"><h3 class="font-bold text-earth-text">Bic Camera 站西店</h3><p class="text-xs text-gray-500 mt-1">任務：RCP-7 調理機</p></div></div>
+                    </div>
+                </div>
+                <!-- Day 3 -->
+                <div id="day3" class="scroll-mt-40">
+                    <div class="flex items-center gap-3 mb-4"><span class="text-xl font-bold text-earth-secondary">Day 03</span><h2 class="text-lg font-bold text-earth-text">水族館全日</h2></div>
+                    <div class="relative pl-4">
+                        <div class="relative pl-10 pb-8"><div class="absolute left-4 top-2 w-3 h-3 bg-blue-400 rounded-full border-2 border-[#F2EFED] z-10"></div><div class="timeline-line"><div class="travel-pill">🚕 30m</div></div><div class="text-xs font-bold text-earth-secondary mb-1">09:00</div><div class="bg-white p-4 rounded-2xl shadow-soft border-l-4 border-blue-400"><h3 class="font-bold text-earth-text">名古屋港水族館</h3><p class="text-xs text-gray-500 mt-1">計程車直達 / 北館虎鯨</p></div></div>
+                        <div class="relative pl-10 last-item"><div class="absolute left-4 top-2 w-3 h-3 bg-earth-accent rounded-full border-2 border-[#F2EFED] z-10"></div><div class="text-xs font-bold text-earth-secondary mb-1">17:30</div><div class="bg-white p-4 rounded-2xl shadow-soft border-l-4 border-earth-accent"><h3 class="font-bold text-earth-text">外帶晚餐</h3><p class="text-xs text-gray-500 mt-1">地雷也炸蝦飯糰 回飯店吃</p></div></div>
+                    </div>
+                </div>
+                <!-- Day 4 -->
+                <div id="day4" class="scroll-mt-40">
+                    <div class="flex items-center gap-3 mb-4"><span class="text-xl font-bold text-earth-secondary">Day 04</span><h2 class="text-lg font-bold text-earth-text">豐田 & 則武</h2></div>
+                    <div class="relative pl-4">
+                        <div class="relative pl-10 pb-8"><div class="absolute left-4 top-2 w-3 h-3 bg-earth-primary rounded-full border-2 border-[#F2EFED] z-10"></div><div class="timeline-line"><div class="travel-pill">🚕 10m</div></div><div class="text-xs font-bold text-earth-secondary mb-1">10:00</div><div class="bg-white p-4 rounded-2xl shadow-soft border-l-4 border-earth-primary"><h3 class="font-bold text-earth-text">豐田產業技術紀念館</h3><p class="text-xs text-gray-500">領 Technoland 整理券</p></div></div>
+                        <div class="relative pl-10 last-item"><div class="absolute left-4 top-2 w-3 h-3 bg-earth-accent rounded-full border-2 border-[#F2EFED] z-10"></div><div class="text-xs font-bold text-earth-secondary mb-1">13:00</div><div class="bg-white p-4 rounded-2xl shadow-soft border-l-4 border-earth-accent"><h3 class="font-bold text-earth-text">AEON Mall 則武之森</h3><p class="text-xs text-gray-500">3F Kids Dining / Breeze</p></div></div>
+                    </div>
+                </div>
+                <!-- Day 5 -->
+                <div id="day5" class="scroll-mt-40">
+                    <div class="flex items-center gap-3 mb-4"><span class="text-xl font-bold text-red-400">Day 05</span><h2 class="text-lg font-bold text-earth-text">歸途 (假日)</h2></div>
+                    <div class="relative pl-4">
+                        <div class="relative pl-10 pb-8"><div class="absolute left-4 top-2 w-3 h-3 bg-blue-600 rounded-full border-2 border-[#F2EFED] z-10"></div><div class="timeline-line"><div class="travel-pill">🚅 28m</div></div><div class="text-xs font-bold text-earth-secondary mb-1">09:20</div><div class="bg-white p-4 rounded-2xl shadow-soft border-l-4 border-blue-600"><h3 class="font-bold text-earth-text">μ-SKY ➜ 機場</h3></div></div>
+                        <div class="relative pl-10 pb-8"><div class="absolute left-4 top-2 w-3 h-3 bg-earth-primary rounded-full border-2 border-[#F2EFED] z-10"></div><div class="timeline-line"><div class="travel-pill">🚶 5m</div></div><div class="text-xs font-bold text-earth-secondary mb-1">10:00</div><div class="bg-white p-4 rounded-2xl shadow-soft border-l-4 border-earth-primary"><h3 class="font-bold text-earth-text">Flight of Dreams</h3><p class="text-xs text-gray-500">1F 飛機溜滑梯</p></div></div>
+                        <div class="relative pl-10 last-item"><div class="absolute left-4 top-2 w-3 h-3 bg-earth-text rounded-full border-2 border-[#F2EFED] z-10"></div><div class="text-xs font-bold text-earth-secondary mb-1">13:15 Check-in</div><div class="bg-white p-4 rounded-2xl shadow-soft border-l-4 border-earth-text"><h3 class="font-bold text-earth-text">CX531 開櫃 (T1)</h3><p class="text-xs text-gray-500">16:15 起飛 ➜ 18:50 TPE</p></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- === TAB: MAP (WITH ADD/DELETE) === -->
+        <div id="view-map" class="tab-content hidden fade-in pt-0">
+            <!-- Google Maps Header -->
+            <div class="w-full h-64 sticky top-0 z-50 shadow-md bg-gray-200">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d52187.97370334863!2d136.88392607910156!3d35.17091599999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x600370d6a258410d%3A0x6b77209322307229!2z5ZCN5Y-k5bGL5biC56eR5a246aSr!5e0!3m2!1szh-TW!2stw!4v1703767890000!5m2!1szh-TW!2stw" 
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+                <div class="absolute bottom-4 right-4">
+                    <button onclick="window.open('https://maps.app.goo.gl/5aHAgNiZ98HLs4EcA', '_blank')" class="bg-earth-primary text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg hover:scale-105 transition">
+                        <i class="fa-solid fa-map-location-dot mr-1"></i> 開啟 Google 清單
+                    </button>
+                </div>
+            </div>
+
+            <!-- List Container -->
+            <div class="px-4 pb-24 pt-4">
+                
+                <!-- Add New Spot Form (Toggleable) -->
+                <div class="mb-4">
+                    <button onclick="toggleMapForm()" class="w-full py-2 bg-[#E0DCD9] rounded-xl text-xs font-bold text-earth-text flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> 新增地點
+                    </button>
+                    <div id="map-form" class="hidden mt-3 bg-white p-4 rounded-xl shadow-soft">
+                        <div class="grid grid-cols-2 gap-2 mb-2">
+                            <select id="map-area" class="bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs outline-none">
+                                <option value="A">A區: 榮</option>
+                                <option value="B">B區: 大須</option>
+                                <option value="C">C區: 名站</option>
+                                <option value="D">D區: 則武</option>
+                            </select>
+                            <select id="map-type" class="bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs outline-none">
+                                <option value="shop">逛街</option>
+                                <option value="coffee">咖啡</option>
+                                <option value="ramen">拉麵</option>
+                                <option value="food">餐廳</option>
+                            </select>
+                        </div>
+                        <input type="text" id="map-name" placeholder="店名" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs mb-2 outline-none">
+                        <input type="text" id="map-desc" placeholder="備註/描述" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs mb-3 outline-none">
+                        <button onclick="addMapSpot()" class="w-full bg-earth-primary text-white py-2 rounded-lg text-xs font-bold">確認新增</button>
+                    </div>
+                </div>
+
+                <div id="map-list-container" class="space-y-6">
+                    <!-- JS Rendered -->
+                </div>
+            </div>
+        </div>
+
+        <!-- === TAB: SHOP (Must Buy Checklist) === -->
+        <div id="view-shop" class="tab-content hidden fade-in pt-4">
+            <h1 class="text-2xl font-bold text-earth-text mb-4 font-serif">Must Buy</h1>
+            
+            <!-- Add Item Input -->
+            <div class="bg-white rounded-2xl shadow-soft p-4 mb-4">
+                <div class="flex flex-col gap-2">
+                    <input type="text" id="shop-add-name" placeholder="新增商品名稱..." class="bg-[#FAF9F6] px-3 py-2 rounded-lg text-sm outline-none border border-transparent focus:border-earth-primary">
+                    <div class="flex gap-2">
+                        <input type="text" id="shop-add-note" placeholder="地點/備註..." class="flex-1 bg-[#FAF9F6] px-3 py-2 rounded-lg text-xs outline-none border border-transparent focus:border-earth-primary">
+                        <button onclick="addBuyItem()" class="bg-earth-primary text-white w-10 rounded-lg flex items-center justify-center shadow-md active:scale-95 transition">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-soft overflow-hidden p-4 space-y-3" id="buy-container">
+                <!-- JS will inject shopping list here -->
+            </div>
+        </div>
+
+        <!-- === TAB: WALLET === -->
+        <div id="view-wallet" class="tab-content hidden fade-in pt-4">
+            <h1 class="text-2xl font-bold text-earth-text mb-4 font-serif">Wallet</h1>
+            <div class="bg-earth-primary rounded-2xl p-5 shadow-soft mb-6 relative overflow-hidden text-white">
+                <div class="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                <div class="flex justify-between mb-2 opacity-80 text-xs"><span>JPY to TWD</span><span>Rate: 0.21</span></div>
+                <input type="number" id="calc-jpy" oninput="calculateRate()" class="w-full text-4xl font-bold bg-transparent outline-none border-b border-white/20 pb-1 mb-2 placeholder-white/30" placeholder="¥0">
+                <div class="flex justify-between items-center"><span class="text-xs opacity-80">約合台幣</span><span id="calc-twd" class="text-2xl font-bold text-earth-accent">$0</span></div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-soft overflow-hidden mb-20">
+                <div class="p-4 bg-[#FAF9F6] border-b border-gray-100">
+                    <div class="flex gap-2 mb-3"><input type="text" id="expense-name" placeholder="品項" class="w-2/3 bg-white border border-gray-200 p-2.5 rounded-xl text-sm outline-none"><input type="number" id="expense-cost" placeholder="¥" class="w-1/3 bg-white border border-gray-200 p-2.5 rounded-xl text-sm outline-none"></div>
+                    <button onclick="addExpense()" class="w-full bg-earth-text text-white font-bold py-2.5 rounded-xl text-sm shadow-sm active:scale-95 transition">新增紀錄</button>
+                </div>
+                <ul id="expense-list" class="divide-y divide-gray-50 max-h-64 overflow-y-auto"></ul>
+            </div>
+        </div>
+
+        <!-- === TAB: INFO === -->
+        <div id="view-info" class="tab-content hidden fade-in pt-4">
+            <h1 class="text-2xl font-bold text-earth-text mb-4 font-serif">Info</h1>
+            <div class="bg-white rounded-2xl shadow-soft p-4 mb-4" onclick="window.open('https://vjw-lp.digital.go.jp/en/', '_blank')">
+                <div class="flex items-center gap-3"><i class="fa-solid fa-qrcode text-2xl text-blue-600"></i><div class="font-bold">Visit Japan Web</div></div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-soft p-4">
+                <h3 class="text-sm font-bold text-earth-primary mb-2">2026 免稅規定</h3>
+                <p class="text-xs text-gray-600 mb-2">✅ 現場退稅 (直接支付未稅價)</p>
+                <p class="text-xs text-gray-600">⚠️ 國際包裹不免稅，需隨身攜帶</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 w-full z-50 glass-nav h-20 pb-4 flex items-center justify-around shadow-lg text-[10px] font-bold text-earth-muted">
+        <button onclick="switchTab('plan')" class="nav-btn group w-1/5 h-full flex flex-col justify-center items-center gap-1 text-earth-primary" data-tab="plan"><div class="w-10 h-6 flex items-center justify-center rounded-full group-active:bg-earth-primary/10 transition"><i class="fa-solid fa-map text-lg"></i></div><span>Plan</span></button>
+        <button onclick="switchTab('map')" class="nav-btn group w-1/5 h-full flex flex-col justify-center items-center gap-1" data-tab="map"><div class="w-10 h-6 flex items-center justify-center rounded-full group-active:bg-earth-primary/10 transition"><i class="fa-solid fa-map-location-dot text-lg"></i></div><span>Map</span></button>
+        <button onclick="switchTab('shop')" class="nav-btn group w-1/5 h-full flex flex-col justify-center items-center gap-1" data-tab="shop"><div class="w-10 h-6 flex items-center justify-center rounded-full group-active:bg-earth-primary/10 transition"><i class="fa-solid fa-check-to-slot text-lg"></i></div><span>Buy</span></button>
+        <button onclick="switchTab('wallet')" class="nav-btn group w-1/5 h-full flex flex-col justify-center items-center gap-1" data-tab="wallet"><div class="w-10 h-6 flex items-center justify-center rounded-full group-active:bg-earth-primary/10 transition"><i class="fa-solid fa-wallet text-lg"></i></div><span>Wallet</span></button>
+        <button onclick="switchTab('info')" class="nav-btn group w-1/5 h-full flex flex-col justify-center items-center gap-1" data-tab="info"><div class="w-10 h-6 flex items-center justify-center rounded-full group-active:bg-earth-primary/10 transition"><i class="fa-solid fa-circle-info text-lg"></i></div><span>Info</span></button>
+    </nav>
+
+    <script>
+        // --- DEFAULT DATA (Nagoya 2026 Specific) ---
+        const defaultBuyList = [
+            { name: "recolte 調理機 RCP-7", note: "Bic Camera 站西店 (Day 2)" },
+            { name: "Tomica 限定 Model AA", note: "豐田紀念館 (Day 4)" },
+            { name: "Marlmarl 圍兜", note: "松坂屋 or 高島屋" },
+            { name: "Breeze 童裝", note: "AEON Mall 則武" },
+            { name: "Seria 百元商品", note: "AEON Mall 則武" },
+            { name: "地雷也 炸蝦飯糰", note: "名鐵百貨/高島屋 (Day 3 晚餐)" },
+            { name: "伴手禮 (蝦餅/薯條三兄弟)", note: "中部機場免稅店 (Day 5)" }
+        ];
+
+        const defaultMapSpots = [
+            { area: "A", name: "Alpen Nagoya", type: "shop", desc: "最大戶外旗艦店" },
+            { area: "A", name: "Parco 西館", type: "shop", desc: "1-3F 潮流品牌" },
+            { area: "A", name: "Seant", type: "shop", desc: "自然風雜貨服飾" },
+            { area: "A", name: "Chanel", type: "shop", desc: "榮三越 1F" },
+            { area: "A", name: "Marlmarl", type: "shop", desc: "松坂屋 童裝圍兜" },
+            { area: "A", name: "Saturdays NYC", type: "coffee", desc: "推車友善，空間大" },
+            { area: "A", name: "THE CUPS", type: "coffee", desc: "拿鐵與 Gelato" },
+            { area: "A", name: "base lab.", type: "coffee", desc: "電視塔景觀" },
+            { area: "A", name: "麺屋 燕", type: "ramen", desc: "鹽味/煮干名店" },
+            { area: "A", name: "麺屋 神樂", type: "ramen", desc: "湯頭清澈鮮美" },
+            { area: "A", name: "Watson der", type: "food", desc: "親子潮味午餐" },
+            { area: "A", name: "蓬萊軒 松坂屋", type: "food", desc: "鰻魚飯" },
+            { area: "B", name: "Store in factory", type: "shop", desc: "必逛！工業風古董" },
+            { area: "B", name: "Graphpaper", type: "shop", desc: "極簡大師選物" },
+            { area: "B", name: "Mill", type: "shop", desc: "精選古著" },
+            { area: "B", name: "TRUNK COFFEE", type: "coffee", desc: "淺焙手沖代表" },
+            { area: "B", name: "KANNON COFFEE", type: "coffee", desc: "大佛餅乾" },
+            { area: "B", name: "煮干しラーメン88", type: "ramen", desc: "首選！專賣煮干" },
+            { area: "B", name: "フジヤマ55", type: "ramen", desc: "沾麵名店" },
+            { area: "C", name: "Bic Camera 站西", type: "shop", desc: "電器玩具 (RCP-7)" },
+            { area: "C", name: "GLITCH COFFEE", type: "coffee", desc: "極簡發酵豆手沖" },
+            { area: "C", name: "Komeda's Coffee", type: "coffee", desc: "老鋪寬敞沙發" },
+            { area: "C", name: "麺家 獅子丸", type: "ramen", desc: "伊勢海老/白湯煮干" },
+            { area: "C", name: "ソラノイロ", type: "ramen", desc: "蔬菜拉麵，親子友善" },
+            { area: "D", name: "AEON Mall", type: "shop", desc: "Breeze/Seria/蔦屋" },
+            { area: "D", name: "Kids Dining", type: "food", desc: "3F 親子用餐區" },
+            { area: "D", name: "君のハンバーグ", type: "food", desc: "1F 漢堡排" }
+        ];
+
+        // --- STATE MANAGEMENT ---
+        let mapItems = JSON.parse(localStorage.getItem('nagoya_map_data')) || defaultMapSpots;
+        let shopItems = JSON.parse(localStorage.getItem('nagoya_shop_data')) || defaultBuyList;
+        let shopCheckState = JSON.parse(localStorage.getItem('nagoya_shop_check')) || {};
+        let expenses = JSON.parse(localStorage.getItem('nagoya_wallet')) || [];
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => { renderMapList(); renderBuyList(); renderExpenses(); });
+
+        // --- MAP LOGIC (ADD/DELETE) ---
+        function toggleMapForm() {
+            document.getElementById('map-form').classList.toggle('hidden');
+        }
+
+        function addMapSpot() {
+            const area = document.getElementById('map-area').value;
+            const type = document.getElementById('map-type').value;
+            const name = document.getElementById('map-name').value;
+            const desc = document.getElementById('map-desc').value;
+
+            if(name) {
+                mapItems.push({ area, name, type, desc });
+                localStorage.setItem('nagoya_map_data', JSON.stringify(mapItems));
+                renderMapList();
+                // Clear inputs
+                document.getElementById('map-name').value = '';
+                document.getElementById('map-desc').value = '';
+                document.getElementById('map-form').classList.add('hidden');
+            }
+        }
+
+        function deleteMapSpot(index) {
+            if(confirm('確定要刪除這個地點嗎？')) {
+                mapItems.splice(index, 1);
+                localStorage.setItem('nagoya_map_data', JSON.stringify(mapItems));
+                renderMapList();
+            }
+        }
+
+        function renderMapList() {
+            const container = document.getElementById('map-list-container');
+            let html = '';
+            
+            // Group by Area
+            const areaMap = { 'A': 'A區：榮 / 矢場町', 'B': 'B區：大須 / 上前津', 'C': 'C區：名古屋車站', 'D': 'D區：龜島 / 則武' };
+            const typeIcons = { shop: '<i class="fa-solid fa-bag-shopping"></i>', coffee: '<i class="fa-solid fa-mug-hot"></i>', ramen: '<i class="fa-solid fa-bowl-food"></i>', food: '<i class="fa-solid fa-utensils"></i>' };
+            const typeColors = { shop: 'bg-red-100 text-red-500', coffee: 'bg-amber-100 text-amber-700', ramen: 'bg-orange-100 text-orange-600', food: 'bg-emerald-100 text-emerald-600' };
+
+            ['A', 'B', 'C', 'D'].forEach(areaKey => {
+                const items = mapItems.filter(i => i.area === areaKey);
+                if(items.length > 0) {
+                    html += `
+                        <div class="mb-6">
+                            <div class="flex items-center gap-2 mb-3 border-l-4 border-earth-secondary pl-2">
+                                <h2 class="font-bold text-lg text-earth-text">${areaMap[areaKey]}</h2>
+                            </div>
+                            <div class="space-y-3">
+                    `;
+                    items.forEach((spot, i) => {
+                        // Find original index in main array for deletion
+                        const originalIndex = mapItems.indexOf(spot);
+                        html += `
+                            <div class="flex items-center justify-between bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition">
+                                <a href="https://maps.google.com/?q=${spot.name}+Nagoya" target="_blank" class="flex items-center gap-3 flex-1">
+                                    <div class="w-9 h-9 rounded-full flex items-center justify-center ${typeColors[spot.type]} text-sm flex-shrink-0">
+                                        ${typeIcons[spot.type]}
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-earth-text text-sm">${spot.name}</div>
+                                        <div class="text-[10px] text-gray-400">${spot.desc}</div>
+                                    </div>
+                                </a>
+                                <button onclick="deleteMapSpot(${originalIndex})" class="text-gray-300 hover:text-earth-alert px-2 ml-2"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        `;
+                    });
+                    html += `</div></div>`;
+                }
+            });
+            container.innerHTML = html;
+        }
+
+        // --- SHOP LOGIC (ADD/DELETE) ---
+        function addBuyItem() {
+            const name = document.getElementById('shop-add-name').value;
+            const note = document.getElementById('shop-add-note').value;
+            if(name) {
+                shopItems.push({ name, note });
+                localStorage.setItem('nagoya_shop_data', JSON.stringify(shopItems));
+                renderBuyList();
+                document.getElementById('shop-add-name').value = '';
+                document.getElementById('shop-add-note').value = '';
+            }
+        }
+
+        function deleteBuyItem(index) {
+            shopItems.splice(index, 1);
+            localStorage.setItem('nagoya_shop_data', JSON.stringify(shopItems));
+            // Also cleanup checked state
+            delete shopCheckState[index]; // Note: This simplistic index approach has flaws if reordering, but fine for simple list
+            localStorage.setItem('nagoya_shop_check', JSON.stringify(shopCheckState));
+            renderBuyList();
+        }
+
+        function renderBuyList() {
+            const container = document.getElementById('buy-container');
+            let html = '';
+            shopItems.forEach((item, i) => {
+                const checked = shopCheckState[i] ? 'checked' : '';
+                html += `
+                    <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-xl hover:bg-white border border-transparent hover:border-earth-primary transition group">
+                        <label class="custom-checkbox cursor-pointer flex-1 flex items-start gap-3">
+                            <input type="checkbox" class="hidden" onchange="toggleBuy(${i})" ${checked}>
+                            <div class="w-5 h-5 rounded border border-gray-300 flex-shrink-0 flex items-center justify-center transition bg-white mt-0.5"></div>
+                            <div>
+                                <div class="text-sm font-bold text-earth-text leading-tight ${checked ? 'line-through text-gray-400' : ''}">${item.name}</div>
+                                <div class="text-[10px] text-gray-400 mt-1">${item.note}</div>
+                            </div>
+                        </label>
+                        <button onclick="deleteBuyItem(${i})" class="text-gray-300 hover:text-earth-alert px-2 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function toggleBuy(id) {
+            shopCheckState[id] = !shopCheckState[id];
+            localStorage.setItem('nagoya_shop_check', JSON.stringify(shopCheckState));
+            renderBuyList();
+        }
+
+        // --- WALLET ---
+        function calculateRate() { document.getElementById('calc-twd').innerText = '$' + Math.round(document.getElementById('calc-jpy').value * 0.21).toLocaleString(); }
+        function addExpense() {
+            const name = document.getElementById('expense-name').value;
+            const cost = document.getElementById('expense-cost').value;
+            if(name && cost) {
+                expenses.unshift({ name, cost, date: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
+                document.getElementById('expense-name').value = '';
+                document.getElementById('expense-cost').value = '';
+                renderExpenses();
+            }
+        }
+        function renderExpenses() {
+            const list = document.getElementById('expense-list');
+            list.innerHTML = '';
+            expenses.slice(0, 50).forEach((item, index) => {
+                const li = document.createElement('li');
+                li.className = "p-4 flex justify-between items-center";
+                li.innerHTML = `<div><div class="text-sm font-bold text-earth-text">${item.name}</div><div class="text-[10px] text-gray-400">${item.date}</div></div><div class="flex items-center gap-3"><span class="font-bold text-earth-secondary">¥${item.cost}</span><button onclick="deleteExpense(${index})" class="text-gray-300 text-xs hover:text-earth-alert"><i class="fa-solid fa-trash"></i></button></div>`;
+                list.appendChild(li);
+            });
+            localStorage.setItem('nagoya_wallet', JSON.stringify(expenses));
+        }
+        function deleteExpense(i) { expenses.splice(i, 1); renderExpenses(); }
+
+        // --- NAV ---
+        function switchTab(tab) {
+            document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.remove('text-earth-primary'); btn.classList.add('text-earth-muted'); if(btn.dataset.tab === tab) { btn.classList.add('text-earth-primary'); btn.classList.remove('text-earth-muted'); } });
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+            document.getElementById(`view-${tab}`).classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+        function scrollToDay(dayId) { document.getElementById(dayId)?.scrollIntoView({behavior: 'smooth', block: 'center'}); }
+    </script>
+</body>
+</html>
